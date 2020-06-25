@@ -20,6 +20,7 @@ class SmtpStatusCheckForm(StatusCheckForm):
             'helo_address',
             'sender',
             'recipient',
+            'expected_code',
             'timeout',
             'frequency',
             'active',
