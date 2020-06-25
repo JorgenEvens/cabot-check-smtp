@@ -60,7 +60,7 @@ class SmtpStatusCheck(StatusCheck):
     recipient = models.EmailField(
         help_text='Address to test sending to',
     )
-    expected_code = models.ExpectedResponseCode(
+    expected_code = models.PositiveIntegerField(
         help_text='Response code expected from server',
     )
 

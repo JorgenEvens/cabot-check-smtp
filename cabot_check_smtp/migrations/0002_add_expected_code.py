@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='SmptStatusCheck',
+            model_name='SmtpStatusCheck',
             name='expected_code',
             field=models.PositiveIntegerField(help_text=b'Expected response code from server', null=True, default=250),
             preserve_default=True,
