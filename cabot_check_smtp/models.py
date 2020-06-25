@@ -10,6 +10,7 @@ class SmtpSession:
     def __init__(self):
         self.c = smtplib.SMTP()
         self.conversation = []
+        self.response_codes = []
 
     def connect(self, host, port):
         self._handle_response(self.c.connect(host, port))
@@ -34,6 +35,7 @@ class SmtpSession:
     def _handle_response(self, res):
         code, message = res
         self.log(str(code) + " " + str(message))
+        self.response_codes.append(code)
 
         if (code >= 300):
             raise Exception('Unexpected response code')
@@ -58,6 +60,9 @@ class SmtpStatusCheck(StatusCheck):
     recipient = models.EmailField(
         help_text='Address to test sending to',
     )
+    expected_code = models.ExpectedResponseCode(
+        help_text='Response code expected from server',
+    )
 
     def _run(self):
         result = StatusCheckResult(status_check=self)
@@ -76,12 +81,12 @@ class SmtpStatusCheck(StatusCheck):
 
         except Exception as e:
             result.error = u'Error occurred: %s' % (e.message,)
-            result.succeeded = False
+            result.succeeded = self.response_code == sess.response_codes[-2]
         except:
             result.error = u'Error occurred: %s' % (sys.exc_info()[0],)
             result.succeeded = False
         else:
-            result.succeeded = True
+            result.succeeded = self.response_code == sess.response_codes[-2]
         finally:
             sess.quit()
 
