@@ -81,12 +81,17 @@ class SmtpStatusCheck(StatusCheck):
 
         except Exception as e:
             result.error = u'Error occurred: %s' % (e.message,)
-            result.succeeded = self.expected_code == sess.response_codes[-1]
+            result.succeeded = False
+
+            if len(sess.response_codes) > 0:
+                result.succeeded = self.expected_code == sess.response_codes[-1]
         except:
             result.error = u'Error occurred: %s' % (sys.exc_info()[0],)
             result.succeeded = False
         else:
-            result.succeeded = self.expected_code == sess.response_codes[-1]
+            result.succeeded = False
+            if len(sess.response_codes) > 0:
+                result.succeeded = self.expected_code == sess.response_codes[-1]
         finally:
             sess.quit()
 
