@@ -80,7 +80,7 @@ class SmtpStatusCheck(StatusCheck):
                 sess.call('RCPT TO:', self.recipient)
 
         except Exception as e:
-            result.error = u'Error occurred: %s' % (e.message,)
+            result.error = u'Error occurred %s: %s' % (e.__class__.__name__, e.message,)
             result.succeeded = False
 
             if len(sess.response_codes) > 0:
